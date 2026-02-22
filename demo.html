@@ -1,0 +1,1264 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>邻里活 NeighborWork - 让每一份邻里手艺在家门口变现</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      }
+      .skill-card {
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      .skill-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+      }
+      .gradient-bg {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+      .trust-badge {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      }
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+      }
+      .category-btn {
+        white-space: nowrap;
+      }
+      .skill-card {
+        animation: fadeIn 0.3s ease-in;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      /* 隐藏滚动条但保持可滚动 */
+      .overflow-x-auto::-webkit-scrollbar {
+        height: 4px;
+      }
+      .overflow-x-auto::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+      }
+      .overflow-x-auto::-webkit-scrollbar-thumb {
+        background: #c4b5fd;
+        border-radius: 10px;
+      }
+      .overflow-x-auto::-webkit-scrollbar-thumb:hover {
+        background: #a78bfa;
+      }
+      
+      /* 移动端优化 */
+      @media (max-width: 768px) {
+        body {
+          font-size: 14px;
+        }
+        
+        .skill-card {
+          margin-bottom: 0;
+        }
+        
+        /* 优化移动端点击区域 */
+        button {
+          min-height: 44px;
+        }
+        
+        /* 移动端卡片优化 */
+        .skill-card .p-5 {
+          padding: 1rem !important;
+        }
+        
+        /* 移动端导航优化 */
+        nav .text-sm {
+          font-size: 0.75rem;
+        }
+        
+        /* 移动端分类按钮优化 */
+        .category-btn {
+          font-size: 0.875rem;
+          padding: 0.625rem 1rem;
+        }
+      }
+      
+      @media (max-width: 640px) {
+        /* 小屏幕进一步优化 */
+        .max-w-7xl {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+        
+        h2 {
+          font-size: 1.125rem !important;
+        }
+        
+        h3 {
+          font-size: 1rem !important;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50">
+    
+    <!-- 顶部导航 -->
+    <nav class="gradient-bg text-white shadow-lg sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 py-3 md:py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-2 md:space-x-3">
+            <svg class="w-6 h-6 md:w-8 md:h-8" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            <span class="text-xl md:text-2xl font-bold">邻里活 · NeighborWork</span>
+          </div>
+          <div class="flex items-center space-x-2 md:space-x-4">
+            <span class="text-xs md:text-sm">📍 <span class="hidden sm:inline">阳光小区</span></span>
+            <div class="hidden sm:flex items-center bg-white/10 rounded-full text-[11px] md:text-xs px-1 py-0.5 md:px-2 md:py-1 space-x-1">
+              <span class="bg-white/20 rounded-full px-2 py-0.5">手艺邻居</span>
+              <span class="text-white/70">·</span>
+              <span class="px-2 py-0.5">需求邻居</span>
+            </div>
+            <button class="bg-white/20 hover:bg-white/30 px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-medium">
+              我的
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 主内容区 - 首页 -->
+    <div id="tab-home" class="tab-content active">
+    <div class="max-w-7xl mx-auto px-3 md:px-4 py-4 md:py-6">
+      
+      <!-- 分类筛选：围绕宝妈轻劳务/轻专业服务 -->
+      <div class="bg-white rounded-xl md:rounded-2xl shadow-sm p-3 md:p-4 mb-4 md:mb-6">
+        <div class="flex items-center justify-between mb-2">
+          <div class="text-sm text-gray-700 font-medium flex items-center">
+            <span class="mr-1">🎯</span> 邻里手艺 · 就在本小区
+          </div>
+          <div class="text-[11px] md:text-xs text-gray-400">跳单不累计信誉分 · 将失去推荐</div>
+        </div>
+        <div class="flex items-center space-x-2 overflow-x-auto pb-2" style="-webkit-overflow-scrolling: touch;">
+          <button onclick="filterByCategory('all')" data-category="all" class="category-btn flex-shrink-0 px-4 py-2.5 rounded-xl transition font-medium text-sm bg-purple-600 text-white shadow-sm">
+            <span class="mr-1">✨</span>
+            全部
+          </button>
+          <button onclick="filterByCategory('childcare')" data-category="childcare" class="category-btn flex-shrink-0 px-4 py-2.5 rounded-xl transition font-medium text-sm bg-gray-100 text-gray-700 hover:bg-gray-200">
+            <span class="mr-1">👶</span>
+            带娃托管
+          </button>
+          <button onclick="filterByCategory('tutor')" data-category="tutor" class="category-btn flex-shrink-0 px-4 py-2.5 rounded-xl transition font-medium text-sm bg-gray-100 text-gray-700 hover:bg-gray-200">
+            <span class="mr-1">📚</span>
+            家教辅导
+          </button>
+          <button onclick="filterByCategory('cook')" data-category="cook" class="category-btn flex-shrink-0 px-4 py-2.5 rounded-xl transition font-medium text-sm bg-gray-100 text-gray-700 hover:bg-gray-200">
+            <span class="mr-1">🍲</span>
+            私厨饭菜
+          </button>
+          <button onclick="filterByCategory('organize')" data-category="organize" class="category-btn flex-shrink-0 px-4 py-2.5 rounded-xl transition font-medium text-sm bg-gray-100 text-gray-700 hover:bg-gray-200">
+            <span class="mr-1">🧺</span>
+            收纳整理
+          </button>
+          <button onclick="filterByCategory('other')" data-category="other" class="category-btn flex-shrink-0 px-4 py-2.5 rounded-xl transition font-medium text-sm bg-gray-100 text-gray-700 hover:bg-gray-200">
+            <span class="mr-1">🤝</span>
+            其他邻里帮忙
+          </button>
+        </div>
+      </div>
+
+      <!-- 本小区高分老司机 -->
+      <div class="mb-6 md:mb-8">
+        <div class="flex items-center justify-between mb-3 md:mb-4">
+          <h2 class="text-lg md:text-xl font-bold text-gray-800 flex items-center">
+            <span class="mr-1 md:mr-2">⭐</span>
+            <span class="hidden sm:inline">本小区高分老司机</span>
+            <span class="sm:hidden">高分老司机</span>
+            <span id="result-count" class="ml-2 md:ml-3 text-xs md:text-sm font-normal text-gray-500"></span>
+          </h2>
+          <button class="text-purple-600 text-xs md:text-sm font-medium hover:text-purple-700 whitespace-nowrap">
+            查看更多 →
+          </button>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          
+          <!-- 手艺人卡片 1：本楼最强接娃宝妈 -->
+          <div class="skill-card bg-white rounded-xl md:rounded-2xl shadow-sm overflow-hidden cursor-pointer" data-category="childcare">
+            <div class="relative">
+              <img src="https://images.unsplash.com/photo-1587613864521-9efb0537e8f6?w=400&h=200&fit=crop" 
+                   alt="接送孩子" class="w-full h-40 md:h-48 object-cover">
+              <div class="absolute top-3 right-3">
+                <span class="trust-badge text-white text-xs px-3 py-1 rounded-full font-medium">
+                  🏅 本楼最强接娃
+                </span>
+              </div>
+            </div>
+            <div class="p-5">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center space-x-3">
+                  <img src="https://i.pravatar.cc/150?img=12" 
+                       class="w-12 h-12 rounded-full border-2 border-purple-200">
+                  <div>
+                    <div class="font-bold text-gray-800">林妈妈</div>
+                    <div class="text-xs text-gray-500">3栋 · 全职宝妈 · 2孩妈妈</div>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <div class="text-yellow-500 text-sm">⭐⭐⭐⭐⭐</div>
+                  <div class="text-xs text-gray-500">接送 120单</div>
+                  <div class="mt-1 text-[11px] text-purple-600 font-medium">邻里信誉分 96</div>
+                </div>
+              </div>
+              
+              <h3 class="font-bold text-gray-800 mb-2">周一至周五 · 放学接娃+短时托管</h3>
+              <p class="text-sm text-gray-600 mb-3 line-clamp-2">
+                住同楼栋，孩子同校，可顺路帮忙接放学并在家中客厅看护，含作业监督和简单点心
+              </p>
+              
+              <div class="flex items-center justify-between">
+                <div class="text-purple-600 font-bold">
+                  ¥40起
+                  <span class="text-xs text-gray-500 font-normal">/次接送</span>
+                </div>
+                <button class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition active:bg-purple-800 btn-book" data-service-name="放学接娃+短时托管">
+                  立即预约
+                </button>
+              </div>
+              
+              <div class="mt-3 pt-3 border-t border-gray-100">
+                <div class="text-xs text-gray-600">
+                  💬 "林妈妈人特别细心，孩子每天都嚷着要去她家玩" —— 3栋王女士
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 手艺人卡片 2：私厨宝妈 -->
+          <div class="skill-card bg-white rounded-2xl shadow-sm overflow-hidden cursor-pointer" data-category="cook">
+            <div class="relative">
+              <img src="https://images.unsplash.com/photo-1588072432836-e10032774350?w=400&h=200&fit=crop" 
+                   alt="私房烘焙" class="w-full h-48 object-cover">
+              <div class="absolute top-3 right-3">
+                <span class="bg-green-500 text-white text-xs px-3 py-1 rounded-full font-medium">
+                  🏆 金牌好评
+                </span>
+              </div>
+            </div>
+            <div class="p-5">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center space-x-3">
+                  <img src="https://i.pravatar.cc/150?img=5" 
+                       class="w-12 h-12 rounded-full border-2 border-green-200">
+                  <div>
+                    <div class="font-bold text-gray-800">李姐</div>
+                    <div class="text-xs text-gray-500">7栋 · 全职宝妈 · 烘焙达人</div>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <div class="text-yellow-500 text-sm">⭐⭐⭐⭐⭐</div>
+                  <div class="text-xs text-gray-500">私厨订单 89单</div>
+                  <div class="mt-1 text-[11px] text-purple-600 font-medium">邻里信誉分 98</div>
+                </div>
+              </div>
+              
+              <h3 class="font-bold text-gray-800 mb-2">低糖私房烘焙 · 工作日晚餐加购</h3>
+              <p class="text-sm text-gray-600 mb-3 line-clamp-2">
+                前五星酒店西点师，现为全职宝妈，提供生日蛋糕、下午茶点心，也可顺带做一份邻居家晚餐
+              </p>
+              
+              <div class="flex items-center justify-between">
+                <div class="text-purple-600 font-bold">
+                  ¥28起
+                  <span class="text-xs text-gray-500 font-normal">/份家常菜</span>
+                </div>
+                <button class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition active:bg-purple-800 btn-book" data-service-name="低糖私房烘焙+晚餐加购">
+                  立即预约
+                </button>
+              </div>
+              
+              <div class="mt-3 pt-3 border-t border-gray-100">
+                <div class="text-xs text-gray-600">
+                  💬 "顺路帮我们家多做一份饭，省心又健康" —— 5栋王女士
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 手艺人卡片 3：家教宝妈 -->
+          <div class="skill-card bg-white rounded-2xl shadow-sm overflow-hidden cursor-pointer" data-category="tutor">
+            <div class="relative">
+              <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400&h=200&fit=crop" 
+                   alt="作业辅导" class="w-full h-48 object-cover">
+              <div class="absolute top-3 right-3">
+                <span class="trust-badge text-white text-xs px-3 py-1 rounded-full font-medium">
+                  ⚡ 认证教师
+                </span>
+              </div>
+            </div>
+            <div class="p-5">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center space-x-3">
+                  <img src="https://i.pravatar.cc/150?img=20" 
+                       class="w-12 h-12 rounded-full border-2 border-purple-200">
+                  <div>
+                    <div class="font-bold text-gray-800">王老师</div>
+                    <div class="text-xs text-gray-500">2栋 · 前培训机构老师</div>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <div class="text-yellow-500 text-sm">⭐⭐⭐⭐⭐</div>
+                  <div class="text-xs text-gray-500">家教 56单</div>
+                  <div class="mt-1 text-[11px] text-purple-600 font-medium">邻里信誉分 94</div>
+                </div>
+              </div>
+              
+              <h3 class="font-bold text-gray-800 mb-2">作业看护 · 家教辅导</h3>
+              <p class="text-sm text-gray-600 mb-3 line-clamp-2">
+                8年一对一辅导经验，可在孩子放学后看护+辅导语数英作业，按小时计费
+              </p>
+              
+              <div class="flex items-center justify-between">
+                <div class="text-purple-600 font-bold">
+                  ¥80
+                  <span class="text-xs text-gray-500 font-normal">/小时起</span>
+                </div>
+                <button class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition active:bg-purple-800 btn-book" data-service-name="作业看护+家教辅导">
+                  立即预约
+                </button>
+              </div>
+              
+              <div class="mt-3 pt-3 border-t border-gray-100">
+                <div class="text-xs text-gray-600">
+                  💬 "孩子就在楼下，随时能看见，放心" —— 2栋刘妈妈
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 手艺人卡片 4 - 收纳整理 -->
+          <div class="skill-card bg-white rounded-2xl shadow-sm overflow-hidden cursor-pointer" data-category="organize">
+            <div class="relative">
+                  <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=200&fit=crop" 
+                    alt="收纳整理" class="w-full h-48 object-cover">
+              <div class="absolute top-3 right-3">
+                <span class="bg-pink-500 text-white text-xs px-3 py-1 rounded-full font-medium">
+                   🧺 收纳达人
+                </span>
+              </div>
+            </div>
+            <div class="p-5">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center space-x-3">
+                  <img src="https://i.pravatar.cc/150?img=45" 
+                       class="w-12 h-12 rounded-full border-2 border-pink-200">
+                  <div>
+                    <div class="font-bold text-gray-800">苏妈妈</div>
+                    <div class="text-xs text-gray-500">4栋 · 全职宝妈 · 收纳整理师</div>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <div class="text-yellow-500 text-sm">⭐⭐⭐⭐⭐</div>
+                  <div class="text-xs text-gray-500">整理 72单</div>
+                  <div class="mt-1 text-[11px] text-purple-600 font-medium">邻里信誉分 93</div>
+                </div>
+              </div>
+              
+              <h3 class="font-bold text-gray-800 mb-2">衣柜收纳 · 儿童房整理</h3>
+              <p class="text-sm text-gray-600 mb-3 line-clamp-2">
+                帮你清理杂物、重新规划收纳空间，儿童房、衣柜、阳台都可以一口价搞定
+              </p>
+              
+              <div class="flex items-center justify-between">
+                <div class="text-purple-600 font-bold">
+                  ¥120起
+                  <span class="text-xs text-gray-500 font-normal">/次上门</span>
+                </div>
+                <button class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition active:bg-purple-800 btn-book" data-service-name="衣柜收纳+儿童房整理">
+                  立即预约
+                </button>
+              </div>
+              
+              <div class="mt-3 pt-3 border-t border-gray-100">
+                <div class="text-xs text-gray-600">
+                  💬 "家里一下子清爽了很多，孩子也愿意自己收拾了" —— 4栋张女士
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 手艺人卡片 5 - 临时帮忙（其他邻里帮忙） -->
+          <div class="skill-card bg-white rounded-2xl shadow-sm overflow-hidden cursor-pointer" data-category="other">
+            <div class="relative">
+              <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=200&fit=crop" 
+                   alt="邻里临时帮忙" class="w-full h-48 object-cover">
+              <div class="absolute top-3 right-3">
+                <span class="trust-badge text-white text-xs px-3 py-1 rounded-full font-medium">
+                  ⚡ 持证上岗
+                </span>
+              </div>
+            </div>
+            <div class="p-5">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center space-x-3">
+                  <img src="https://i.pravatar.cc/150?img=18" 
+                       class="w-12 h-12 rounded-full border-2 border-purple-200">
+                  <div>
+                    <div class="font-bold text-gray-800">阿霞</div>
+                    <div class="text-xs text-gray-500">1栋 · 宝妈 · 邻里万能帮手</div>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <div class="text-yellow-500 text-sm">⭐⭐⭐⭐⭐</div>
+                  <div class="text-xs text-gray-500">邻里帮忙 64单</div>
+                  <div class="mt-1 text-[11px] text-purple-600 font-medium">邻里信誉分 90</div>
+                </div>
+              </div>
+              
+              <h3 class="font-bold text-gray-800 mb-2">临时帮忙 · 代收快递/遛狗/浇花</h3>
+              <p class="text-sm text-gray-600 mb-3 line-clamp-2">
+                常年在家，有空闲时间可以帮忙代收快递、短时帮看家、浇花、简单家务等
+              </p>
+              
+              <div class="flex items-center justify-between">
+                <div class="text-purple-600 font-bold">
+                  ¥20起
+                  <span class="text-xs text-gray-500 font-normal">/次小帮忙</span>
+                </div>
+                <button class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition active:bg-purple-800 btn-book" data-service-name="邻里临时帮忙">
+                  立即预约
+                </button>
+              </div>
+              
+              <div class="mt-3 pt-3 border-t border-gray-100">
+                <div class="text-xs text-gray-600">
+                  💬 "出差时请她帮忙浇花和收快递，很省心" —— 6栋老李
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 手艺人卡片 6 - 简单家务与老人陪护（轻劳务扩展） -->
+          <div class="skill-card bg-white rounded-2xl shadow-sm overflow-hidden cursor-pointer" data-category="childcare">
+            <div class="relative">
+                  <img src="https://images.unsplash.com/photo-1582719478171-2f2df0c9b9a0?w=400&h=200&fit=crop" 
+                    alt="老人陪护" class="w-full h-48 object-cover">
+              <div class="absolute top-3 right-3">
+                <span class="bg-blue-500 text-white text-xs px-3 py-1 rounded-full font-medium">
+                   🤗 陪伴关怀
+                </span>
+              </div>
+            </div>
+            <div class="p-5">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center space-x-3">
+                  <img src="https://i.pravatar.cc/150?img=33" 
+                       class="w-12 h-12 rounded-full border-2 border-blue-200">
+                  <div>
+                    <div class="font-bold text-gray-800">李阿姨</div>
+                    <div class="text-xs text-gray-500">8栋 · 宝妈 · 兼顾老人陪护</div>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <div class="text-yellow-500 text-sm">⭐⭐⭐⭐⭐</div>
+                  <div class="text-xs text-gray-500">陪护/家务 48单</div>
+                  <div class="mt-1 text-[11px] text-purple-600 font-medium">邻里信誉分 92</div>
+                </div>
+              </div>
+              
+              <h3 class="font-bold text-gray-800 mb-2">简单家务 · 老人陪护</h3>
+              <p class="text-sm text-gray-600 mb-3 line-clamp-2">
+                可帮忙做简单家务、陪老人聊天散步，白天时段为主，可按半天计费
+              </p>
+              
+              <div class="flex items-center justify-between">
+                <div class="text-purple-600 font-bold">
+                  ¥80起
+                  <span class="text-xs text-gray-500 font-normal">/半天</span>
+                </div>
+                <button class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition active:bg-purple-800 btn-book" data-service-name="简单家务+老人陪护">
+                  立即预约
+                </button>
+              </div>
+              
+              <div class="mt-3 pt-3 border-t border-gray-100">
+                <div class="text-xs text-gray-600">
+                  💬 "父母在家有人陪着，我们上班更安心" —— 8栋孙先生
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 最新需求广场 -->
+      <div class="mb-6 md:mb-8">
+        <div class="flex items-center justify-between mb-3 md:mb-4">
+          <h2 class="text-lg md:text-xl font-bold text-gray-800 flex items-center">
+            <span class="mr-1 md:mr-2">📢</span>
+            邻居临时需求广场
+          </h2>
+          <button class="bg-purple-600 hover:bg-purple-700 text-white px-4 md:px-5 py-2 rounded-lg text-xs md:text-sm font-medium shadow-sm transition active:bg-purple-800 whitespace-nowrap">
+            + 发布需求
+          </button>
+        </div>
+
+        <div class="space-y-4">
+          
+          <!-- 需求卡片 1：接孩子+短时托管 -->
+          <div class="bg-white rounded-xl shadow-sm p-4 md:p-5 hover:shadow-md transition cursor-pointer active:bg-gray-50">
+            <div class="flex items-start justify-between">
+              <div class="flex-1">
+                <div class="flex items-center space-x-2 mb-2">
+                  <img src="https://i.pravatar.cc/150?img=33" class="w-10 h-10 rounded-full">
+                  <div>
+                    <div class="font-medium text-gray-800">陈女士</div>
+                    <div class="text-xs text-gray-500">6栋 · 2分钟前</div>
+                  </div>
+                  <span class="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded-md">👶 带娃托管</span>
+                </div>
+                <h3 class="font-bold text-gray-800 mb-2">周三下午急需接一下孩子+短时看护</h3>
+                <p class="text-sm text-gray-600 mb-3">
+                  孩子幼儿园放学时间和我加班冲突，希望同小区宝妈顺路帮忙接回家里看2小时
+                </p>
+                <div class="flex items-center space-x-4 text-xs text-gray-500">
+                  <span>💰 预算: ¥60-80</span>
+                  <span>📍 6栋301</span>
+                  <span>⏰ 本周三下午</span>
+                </div>
+              </div>
+              <button class="bg-purple-100 hover:bg-purple-200 text-purple-700 px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition ml-2 md:ml-4 whitespace-nowrap active:bg-purple-300">
+                接单
+              </button>
+            </div>
+          </div>
+
+          <!-- 需求卡片 2：作业辅导 -->
+          <div class="bg-white rounded-xl shadow-sm p-4 md:p-5 hover:shadow-md transition cursor-pointer active:bg-gray-50">
+            <div class="flex items-start justify-between">
+              <div class="flex-1">
+                <div class="flex items-center space-x-2 mb-2">
+                  <img src="https://i.pravatar.cc/150?img=8" class="w-10 h-10 rounded-full">
+                  <div>
+                    <div class="font-medium text-gray-800">赵先生</div>
+                    <div class="text-xs text-gray-500">1栋 · 15分钟前</div>
+                  </div>
+                  <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-md">📚 家教辅导</span>
+                </div>
+                <h3 class="font-bold text-gray-800 mb-2">寻找同小区小学数学辅导老师</h3>
+                <p class="text-sm text-gray-600 mb-3">
+                  孩子三年级，数学基础有点弱，希望找同小区的老师每周辅导2-3次，方便上门
+                </p>
+                <div class="flex items-center space-x-4 text-xs text-gray-500">
+                  <span>💰 预算: ¥120/小时</span>
+                  <span>📍 1栋</span>
+                  <span>⏰ 周末优先</span>
+                </div>
+              </div>
+              <button class="bg-purple-100 hover:bg-purple-200 text-purple-700 px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition ml-2 md:ml-4 whitespace-nowrap active:bg-purple-300">
+                接单
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 极简交易流：下单-托管-打卡-评价 -->
+      <div class="mb-6 md:mb-8">
+        <div class="bg-white rounded-2xl shadow-sm p-4 md:p-6">
+          <h2 class="text-lg md:text-xl font-bold text-gray-800 mb-4 flex items-center">
+            <span class="mr-2">✅</span> 下单一次，积累一份邻里信用
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+            <div class="flex items-start space-x-3">
+              <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">1</div>
+              <div>
+                <div class="font-semibold text-gray-800 mb-1">在线预约</div>
+                <div class="text-gray-600">选时间段，一键下单，费用托管在邻里活平台</div>
+              </div>
+            </div>
+            <div class="flex items-start space-x-3">
+              <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">2</div>
+              <div>
+                <div class="font-semibold text-gray-800 mb-1">到达打卡</div>
+                <div class="text-gray-600">手艺邻居到达与完成服务都需点击打卡，形成服务记录</div>
+              </div>
+            </div>
+            <div class="flex items-start space-x-3">
+              <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">3</div>
+              <div>
+                <div class="font-semibold text-gray-800 mb-1">互助保险</div>
+                <div class="text-gray-600">每单自动附赠约 0.5 元服务意外险，平台可仲裁</div>
+              </div>
+            </div>
+            <div class="flex items-start space-x-3">
+              <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm">4</div>
+              <div>
+                <div class="font-semibold text-gray-800 mb-1">双向评价</div>
+                <div class="text-gray-600">完成后图文评价沉淀为邻里信誉分，决定后续排序与推荐</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 邻里保障 -->
+      <div class="mb-10 md:mb-12">
+        <div class="bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-100 rounded-2xl p-4 md:p-6 flex flex-col md:flex-row md:items-center md:justify-between">
+          <div class="mb-4 md:mb-0 md:max-w-xl">
+            <h2 class="text-lg md:text-xl font-bold text-gray-800 mb-2 flex items-center">
+              <span class="mr-2">🛡️</span> 邻里保障 · 不只是拼价格
+            </h2>
+            <p class="text-sm text-gray-700 mb-3">平台内每一单都有记录、保险与信用资产沉淀。跳过平台私下交易，将无法点亮勋章、积累信誉分，也享受不到保险和仲裁。</p>
+            <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+              <li>实名认证 + 小区地址核验</li>
+              <li>虚拟号/平台私聊保护手机号隐私</li>
+              <li>异常情况可申请平台介入仲裁</li>
+            </ul>
+          </div>
+          <div class="bg-white rounded-xl shadow-sm p-4 md:p-5 w-full md:w-72 mt-2 md:mt-0">
+            <div class="flex items-center justify-between mb-2 text-sm">
+              <span class="text-gray-600">我的邻里信誉分</span>
+              <span class="text-xs text-purple-500">示例数据</span>
+            </div>
+            <div class="flex items-end space-x-2 mb-3">
+              <span class="text-3xl font-bold text-purple-600">94</span>
+              <span class="text-xs text-gray-500 mb-1">/ 100</span>
+            </div>
+            <div class="w-full bg-gray-100 rounded-full h-2 mb-3 overflow-hidden">
+              <div class="bg-purple-500 h-2 rounded-full" style="width: 88%"></div>
+            </div>
+            <div class="text-xs text-gray-600 mb-3">近30天完成 6 单，收到 6 条图文好评，「本栋最靠谱私厨」勋章已点亮。</div>
+            <div class="text-[11px] text-gray-400">继续通过平台完成订单，你的手艺将被优先推荐给全小区邻居。</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    </div>
+
+    <!-- 邻里页 -->
+    <div id="tab-neighbors" class="tab-content">
+      <div class="max-w-7xl mx-auto px-3 md:px-4 py-4 md:py-6">
+        
+        <!-- 邻里动态 -->
+        <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+          <h2 class="text-xl font-bold text-gray-800 mb-4">🏘️ 小区动态</h2>
+          
+          <div class="space-y-4">
+            
+            <!-- 动态 1 -->
+            <div class="border-b border-gray-100 pb-4">
+              <div class="flex items-start space-x-3">
+                <img src="https://i.pravatar.cc/150?img=15" class="w-12 h-12 rounded-full">
+                <div class="flex-1">
+                  <div class="flex items-center justify-between mb-2">
+                    <div>
+                      <span class="font-bold text-gray-800">周阿姨</span>
+                      <span class="text-xs text-gray-500 ml-2">5栋 · 1小时前</span>
+                    </div>
+                  </div>
+                  <p class="text-gray-700 mb-3">今天做了自家腌制的泡菜，有需要的邻居可以来尝尝，免费送！😊</p>
+                  <div class="grid grid-cols-3 gap-2 mb-3">
+                    <img src="https://images.unsplash.com/photo-1625938145312-c260f0ee3ad2?w=200&h=200&fit=crop" 
+                         class="w-full h-24 object-cover rounded-lg">
+                    <img src="https://images.unsplash.com/photo-1589621316382-008455b857cd?w=200&h=200&fit=crop" 
+                         class="w-full h-24 object-cover rounded-lg">
+                  </div>
+                  <div class="flex items-center space-x-6 text-sm text-gray-500">
+                    <button class="hover:text-purple-600">👍 26</button>
+                    <button class="hover:text-purple-600">💬 8</button>
+                    <button class="hover:text-purple-600">🔗 分享</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 动态 2 -->
+            <div class="border-b border-gray-100 pb-4">
+              <div class="flex items-start space-x-3">
+                <img src="https://i.pravatar.cc/150?img=25" class="w-12 h-12 rounded-full">
+                <div class="flex-1">
+                  <div class="flex items-center justify-between mb-2">
+                    <div>
+                      <span class="font-bold text-gray-800">小李</span>
+                      <span class="text-xs text-gray-500 ml-2">2栋 · 3小时前</span>
+                    </div>
+                  </div>
+                  <p class="text-gray-700 mb-3">感谢张师傅！水管修得又快又好，价格也实惠，强烈推荐给大家！💯</p>
+                  <div class="flex items-center space-x-6 text-sm text-gray-500">
+                    <button class="hover:text-purple-600">👍 42</button>
+                    <button class="hover:text-purple-600">💬 15</button>
+                    <button class="hover:text-purple-600">🔗 分享</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 动态 3 -->
+            <div class="pb-4">
+              <div class="flex items-start space-x-3">
+                <img src="https://i.pravatar.cc/150?img=30" class="w-12 h-12 rounded-full">
+                <div class="flex-1">
+                  <div class="flex items-center justify-between mb-2">
+                    <div>
+                      <span class="font-bold text-gray-800">物业管理处</span>
+                      <span class="bg-blue-100 text-blue-600 text-xs px-2 py-0.5 rounded ml-2">官方</span>
+                      <span class="text-xs text-gray-500 ml-2">昨天</span>
+                    </div>
+                  </div>
+                  <p class="text-gray-700 mb-3">📢 温馨提示：本周六上午9-12点将进行消防演练，请大家配合。感谢支持！</p>
+                  <div class="flex items-center space-x-6 text-sm text-gray-500">
+                    <button class="hover:text-purple-600">👍 89</button>
+                    <button class="hover:text-purple-600">💬 23</button>
+                    <button class="hover:text-purple-600">🔗 分享</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 热门手艺人榜单 -->
+        <div class="bg-white rounded-2xl shadow-sm p-6">
+          <h2 class="text-xl font-bold text-gray-800 mb-4">🏆 本月热门手艺人</h2>
+          
+          <div class="space-y-3">
+            
+            <!-- 榜单项 1 -->
+            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-xl transition cursor-pointer">
+              <div class="flex items-center space-x-3">
+                <div class="text-2xl font-bold text-yellow-500">1</div>
+                <img src="https://i.pravatar.cc/150?img=12" class="w-12 h-12 rounded-full border-2 border-yellow-400">
+                <div>
+                  <div class="font-bold text-gray-800">张师傅</div>
+                  <div class="text-xs text-gray-500">🔧 家居维修 · 128单</div>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-yellow-500 text-sm">⭐⭐⭐⭐⭐</div>
+                <div class="text-xs text-gray-500">好评率 99%</div>
+              </div>
+            </div>
+
+            <!-- 榜单项 2 -->
+            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-xl transition cursor-pointer">
+              <div class="flex items-center space-x-3">
+                <div class="text-2xl font-bold text-gray-400">2</div>
+                <img src="https://i.pravatar.cc/150?img=5" class="w-12 h-12 rounded-full border-2 border-gray-300">
+                <div>
+                  <div class="font-bold text-gray-800">李姐</div>
+                  <div class="text-xs text-gray-500">🍜 私房烘焙 · 89单</div>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-yellow-500 text-sm">⭐⭐⭐⭐⭐</div>
+                <div class="text-xs text-gray-500">好评率 100%</div>
+              </div>
+            </div>
+
+            <!-- 榜单项 3 -->
+            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-xl transition cursor-pointer">
+              <div class="flex items-center space-x-3">
+                <div class="text-2xl font-bold text-orange-400">3</div>
+                <img src="https://i.pravatar.cc/150?img=20" class="w-12 h-12 rounded-full border-2 border-orange-300">
+                <div>
+                  <div class="font-bold text-gray-800">王老师</div>
+                  <div class="text-xs text-gray-500">📚 钢琴辅导 · 56单</div>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-yellow-500 text-sm">⭐⭐⭐⭐⭐</div>
+                <div class="text-xs text-gray-500">好评率 98%</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 消息页 -->
+    <div id="tab-messages" class="tab-content" style="display: none;">
+      <div class="max-w-7xl mx-auto px-4 py-6">
+        
+        <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+          <div class="border-b border-gray-200 p-4">
+            <h2 class="text-xl font-bold text-gray-800">💬 消息中心</h2>
+          </div>
+
+          <div class="divide-y divide-gray-100">
+            
+            <!-- 消息项 1 -->
+            <div class="p-4 hover:bg-gray-50 cursor-pointer transition">
+              <div class="flex items-start space-x-3">
+                <div class="relative">
+                  <img src="https://i.pravatar.cc/150?img=12" class="w-14 h-14 rounded-full">
+                  <div class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">3</div>
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="font-bold text-gray-800">张师傅</span>
+                    <span class="text-xs text-gray-500">5分钟前</span>
+                  </div>
+                  <p class="text-sm text-gray-600 mb-1">好的，我今天下午3点过去帮您看看</p>
+                  <span class="text-xs text-purple-600">关于：水管维修</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 消息项 2 -->
+            <div class="p-4 hover:bg-gray-50 cursor-pointer transition">
+              <div class="flex items-start space-x-3">
+                <div class="relative">
+                  <img src="https://i.pravatar.cc/150?img=5" class="w-14 h-14 rounded-full">
+                  <div class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">1</div>
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="font-bold text-gray-800">李姐</span>
+                    <span class="text-xs text-gray-500">1小时前</span>
+                  </div>
+                  <p class="text-sm text-gray-600 mb-1">蛋糕已经做好了，您方便的话可以来取哦～</p>
+                  <span class="text-xs text-purple-600">关于：生日蛋糕定制</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 消息项 3 - 系统消息 -->
+            <div class="p-4 hover:bg-gray-50 cursor-pointer transition bg-blue-50">
+              <div class="flex items-start space-x-3">
+                <div class="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center text-white text-2xl">
+                  🔔
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="font-bold text-gray-800">系统通知</span>
+                    <span class="text-xs text-gray-500">2小时前</span>
+                  </div>
+                  <p class="text-sm text-gray-600 mb-1">您的订单已完成，快去评价张师傅吧！</p>
+                  <span class="text-xs text-blue-600">订单编号：#20260221001</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 消息项 4 -->
+            <div class="p-4 hover:bg-gray-50 cursor-pointer transition opacity-60">
+              <div class="flex items-start space-x-3">
+                <img src="https://i.pravatar.cc/150?img=20" class="w-14 h-14 rounded-full">
+                <div class="flex-1">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="font-bold text-gray-800">王老师</span>
+                    <span class="text-xs text-gray-500">昨天</span>
+                  </div>
+                  <p class="text-sm text-gray-600 mb-1">下次课我们继续学习新曲目</p>
+                  <span class="text-xs text-purple-600">关于：钢琴课程</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 消息项 5 -->
+            <div class="p-4 hover:bg-gray-50 cursor-pointer transition opacity-60">
+              <div class="flex items-start space-x-3">
+                <img src="https://i.pravatar.cc/150?img=33" class="w-14 h-14 rounded-full">
+                <div class="flex-1">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="font-bold text-gray-800">陈女士</span>
+                    <span class="text-xs text-gray-500">2天前</span>
+                  </div>
+                  <p class="text-sm text-gray-600 mb-1">谢谢您的帮助！</p>
+                  <span class="text-xs text-purple-600">关于：搬家帮忙</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 我的页面 -->
+    <div id="tab-profile" class="tab-content">
+      <div class="max-w-7xl mx-auto px-3 md:px-4 py-4 md:py-6">
+        
+        <!-- 个人信息卡片 -->
+        <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl shadow-lg p-6 mb-6 text-white">
+          <div class="flex items-center space-x-4 mb-4">
+            <img src="https://i.pravatar.cc/150?img=40" class="w-20 h-20 rounded-full border-4 border-white/30">
+            <div class="flex-1">
+              <h2 class="text-2xl font-bold mb-1">张三</h2>
+              <p class="text-purple-100 text-sm">📍 阳光小区 3栋501 · 手艺邻居</p>
+              <div class="flex items-center space-x-2 mt-2 text-xs">
+                <span class="bg-white/20 px-3 py-1 rounded-full">⚡ 实名+小区地址已认证</span>
+                <span class="bg-white/20 px-3 py-1 rounded-full flex items-center space-x-1">
+                  <span>🏅</span><span>本栋最靠谱私厨（示例）</span>
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-white/20">
+            <div class="text-center">
+              <div class="text-2xl font-bold">5</div>
+              <div class="text-xs text-purple-100 mt-1">当前上架服务</div>
+            </div>
+            <div class="text-center">
+              <div class="text-2xl font-bold">23</div>
+              <div class="text-xs text-purple-100 mt-1">完成订单</div>
+            </div>
+            <div class="text-center">
+              <div class="text-2xl font-bold">94</div>
+              <div class="text-xs text-purple-100 mt-1">邻里信誉分 · 示例</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 功能菜单 -->
+        <div class="bg-white rounded-2xl shadow-sm mb-6 overflow-hidden">
+          <div class="p-4 border-b border-gray-100">
+            <h3 class="font-bold text-gray-800">我的服务</h3>
+          </div>
+          <div class="divide-y divide-gray-100">
+            <button class="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition">
+              <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <span class="text-xl">📦</span>
+                </div>
+                <span class="text-gray-800 font-medium">我发布的服务</span>
+              </div>
+              <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+            <button class="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition">
+              <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <span class="text-xl">📝</span>
+                </div>
+                <span class="text-gray-800 font-medium">我的订单</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">3</span>
+                <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                </svg>
+              </div>
+            </button>
+            <button class="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition">
+              <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                  <span class="text-xl">⭐</span>
+                </div>
+                <span class="text-gray-800 font-medium">我的评价</span>
+              </div>
+              <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- 钱包 -->
+        <div class="bg-white rounded-2xl shadow-sm mb-6 overflow-hidden">
+          <div class="p-4 border-b border-gray-100">
+            <h3 class="font-bold text-gray-800">我的钱包</h3>
+          </div>
+          <div class="p-4">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <div class="text-sm text-gray-500 mb-1">账户余额（平台内结算）</div>
+                <div class="text-3xl font-bold text-gray-800">¥1,280</div>
+              </div>
+              <button class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition">
+                提现
+              </button>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="bg-gray-50 rounded-lg p-3">
+                <div class="text-xs text-gray-500 mb-1">本月收入</div>
+                <div class="text-lg font-bold text-green-600">+¥680</div>
+              </div>
+              <div class="bg-gray-50 rounded-lg p-3">
+                <div class="text-xs text-gray-500 mb-1">本月支出</div>
+                <div class="text-lg font-bold text-orange-600">-¥320</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 其他设置 -->
+        <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+          <div class="divide-y divide-gray-100">
+            <button class="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition">
+              <div class="flex items-center space-x-3">
+                <span class="text-xl">🔔</span>
+                <span class="text-gray-800">消息通知</span>
+              </div>
+              <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+            <button class="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition">
+              <div class="flex items-center space-x-3">
+                <span class="text-xl">⚙️</span>
+                <span class="text-gray-800">账号设置</span>
+              </div>
+              <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+            <button class="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition">
+              <div class="flex items-center space-x-3">
+                <span class="text-xl">❓</span>
+                <span class="text-gray-800">帮助中心</span>
+              </div>
+              <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+            <button class="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition">
+              <div class="flex items-center space-x-3">
+                <span class="text-xl">ℹ️</span>
+                <span class="text-gray-800">关于我们</span>
+              </div>
+              <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 底部导航 -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg safe-area-inset-bottom">
+      <div class="max-w-7xl mx-auto px-2 md:px-4">
+        <div class="grid grid-cols-3 gap-1 py-2">
+          <button onclick="switchTab('home')" id="btn-home" class="flex flex-col items-center py-2 text-purple-600 active:bg-gray-100 rounded-lg transition">
+            <svg class="w-6 h-6 md:w-7 md:h-7 mb-1" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            <span class="text-xs font-medium">首页</span>
+          </button>
+          <button onclick="switchTab('neighbors')" id="btn-neighbors" class="flex flex-col items-center py-2 text-gray-500 hover:text-purple-600 active:bg-gray-100 rounded-lg transition">
+            <svg class="w-6 h-6 md:w-7 md:h-7 mb-1" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+            </svg>
+            <span class="text-xs font-medium">邻里</span>
+          </button>
+          <button onclick="switchTab('messages')" id="btn-messages" class="flex flex-col items-center py-2 text-gray-500 hover:text-purple-600" style="display: none;">
+            <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+            </svg>
+            <span class="text-xs font-medium">消息</span>
+          </button>
+          <button onclick="switchTab('profile')" id="btn-profile" class="flex flex-col items-center py-2 text-gray-500 hover:text-purple-600 active:bg-gray-100 rounded-lg transition">
+            <svg class="w-6 h-6 md:w-7 md:h-7 mb-1" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            <span class="text-xs font-medium">我的</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部占位 -->
+    <div class="h-20"></div>
+
+    <script>
+      function switchTab(tabName) {
+        // 隐藏所有 tab 内容
+        const allTabs = document.querySelectorAll('.tab-content');
+        allTabs.forEach(tab => tab.classList.remove('active'));
+        
+        // 显示选中的 tab
+        document.getElementById('tab-' + tabName).classList.add('active');
+        
+        // 更新底部导航按钮状态
+        const allButtons = document.querySelectorAll('[id^="btn-"]');
+        allButtons.forEach(btn => {
+          btn.classList.remove('text-purple-600');
+          btn.classList.add('text-gray-500');
+        });
+        
+        document.getElementById('btn-' + tabName).classList.remove('text-gray-500');
+        document.getElementById('btn-' + tabName).classList.add('text-purple-600');
+        
+        // 滚动到顶部
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function filterByCategory(category) {
+        // 更新分类按钮样式
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        categoryButtons.forEach(btn => {
+          if (btn.dataset.category === category) {
+            btn.classList.remove('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+            btn.classList.add('bg-purple-600', 'text-white', 'shadow-sm');
+          } else {
+            btn.classList.remove('bg-purple-600', 'text-white', 'shadow-sm');
+            btn.classList.add('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+          }
+        });
+        
+        // 筛选服务卡片
+        const skillCards = document.querySelectorAll('.skill-card');
+        let visibleCount = 0;
+        
+        skillCards.forEach(card => {
+          if (category === 'all' || card.dataset.category === category) {
+            card.style.display = 'block';
+            // 添加淡入动画
+            card.style.animation = 'none';
+            setTimeout(() => {
+              card.style.animation = 'fadeIn 0.3s ease-in';
+            }, 10);
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+        
+        // 更新结果计数
+        const resultCount = document.getElementById('result-count');
+        if (category === 'all') {
+          resultCount.textContent = `共 ${visibleCount} 位手艺人`;
+        } else {
+          resultCount.textContent = `找到 ${visibleCount} 位手艺人`;
+        }
+        
+        // 显示/隐藏空状态
+        const emptyState = document.getElementById('empty-state');
+        if (visibleCount === 0) {
+          if (!emptyState) {
+            const container = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3');
+            const empty = document.createElement('div');
+            empty.id = 'empty-state';
+            empty.className = 'col-span-full text-center py-12';
+            empty.innerHTML = `
+              <div class="text-6xl mb-4">🔍</div>
+              <div class="text-gray-500 text-lg">暂无该分类的服务</div>
+              <div class="text-gray-400 text-sm mt-2">试试其他分类吧～</div>
+            `;
+            container.appendChild(empty);
+          } else {
+            emptyState.style.display = 'block';
+          }
+        } else {
+          if (emptyState) {
+            emptyState.style.display = 'none';
+          }
+        }
+      }
+
+      // 简易下单弹窗（模拟极简交易流：选择时间段 -> 托管+保险提示）
+      function initBookingModal() {
+        const modal = document.getElementById('booking-modal');
+        const overlay = document.getElementById('booking-overlay');
+        const serviceNameSpan = document.getElementById('booking-service-name');
+        const closeBtn = document.getElementById('booking-close');
+        const confirmBtn = document.getElementById('booking-confirm');
+        const timeInput = document.getElementById('booking-time');
+        const toast = document.getElementById('booking-toast');
+
+        function openModal(serviceName) {
+          serviceNameSpan.textContent = serviceName || '邻里服务';
+          modal.classList.remove('hidden');
+          overlay.classList.remove('hidden');
+        }
+
+        function closeModal() {
+          modal.classList.add('hidden');
+          overlay.classList.add('hidden');
+        }
+
+        document.querySelectorAll('.btn-book').forEach(function(btn) {
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const name = btn.getAttribute('data-service-name');
+            openModal(name);
+          });
+        });
+
+        if (closeBtn) {
+          closeBtn.addEventListener('click', closeModal);
+        }
+        if (overlay) {
+          overlay.addEventListener('click', closeModal);
+        }
+        if (confirmBtn) {
+          confirmBtn.addEventListener('click', function() {
+            if (!timeInput.value) {
+              timeInput.focus();
+              return;
+            }
+            closeModal();
+            // 简单成功提示，说明托管+保险
+            toast.classList.remove('hidden');
+            setTimeout(function() {
+              toast.classList.add('hidden');
+            }, 2600);
+          });
+        }
+      }
+
+      // 页面加载时初始化计数与预订弹窗
+      window.addEventListener('DOMContentLoaded', function() {
+        filterByCategory('all');
+        initBookingModal();
+      });
+    </script>
+
+    <!-- 下单弹窗 & 遮罩 -->
+    <div id="booking-overlay" class="fixed inset-0 bg-black/30 backdrop-blur-sm hidden z-40"></div>
+    <div id="booking-modal" class="fixed inset-x-4 bottom-24 md:inset-0 md:m-auto md:max-w-md bg-white rounded-2xl shadow-2xl border border-gray-100 hidden z-50">
+      <div class="p-4 md:p-6">
+        <div class="flex items-start justify-between mb-3">
+          <div>
+            <div class="text-xs text-purple-500 font-medium mb-1">极简下单 · 资金托管到邻里活</div>
+            <h3 class="text-base md:text-lg font-bold text-gray-800 mb-1" id="booking-service-name">邻里服务</h3>
+            <p class="text-xs text-gray-500">请选择服务时间段并确认，本次费用将托管在平台，服务完成后自动结算。</p>
+          </div>
+          <button id="booking-close" class="text-gray-400 hover:text-gray-600 text-xl leading-none">×</button>
+        </div>
+        <div class="space-y-3 text-sm mb-4">
+          <div>
+            <label class="block text-gray-700 text-xs mb-1">服务时间</label>
+            <input id="booking-time" type="text" placeholder="例如：本周三 16:00-18:00" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent" />
+          </div>
+          <div class="bg-purple-50 text-[11px] text-purple-700 rounded-xl p-2 flex items-start space-x-2">
+            <span>🛡️</span>
+            <div>
+              <div>本次费用将托管在邻里活平台，服务完成并双方确认后再打给手艺邻居。</div>
+              <div class="mt-1">每单自动附赠约 0.5 元服务意外险，遇到纠纷可申请平台仲裁。</div>
+            </div>
+          </div>
+        </div>
+        <button id="booking-confirm" class="w-full bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium py-2.5 rounded-lg transition">
+          确认下单（示例，不实际扣款）
+        </button>
+      </div>
+    </div>
+
+    <!-- 下单成功提示 -->
+    <div id="booking-toast" class="fixed left-1/2 -translate-x-1/2 bottom-28 md:bottom-8 bg-gray-900 text-white text-xs md:text-sm px-4 md:px-5 py-2.5 rounded-full shadow-lg flex items-center space-x-2 hidden z-50">
+      <span>✅ 已生成邻里订单示例，信用资产将随真实订单累积</span>
+    </div>
+
+  </body>
+</html>
